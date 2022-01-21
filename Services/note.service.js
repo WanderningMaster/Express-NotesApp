@@ -6,39 +6,29 @@ const { countTasks, countIdeas, countRandomThoughts } = require('../Helpers/getS
 class NoteService{
     addNote(newNote){
         const {name, category, content} = newNote;
-        if(name && category && content){
 
-            const created = currentTime();
-            const dates = findAllDate(content);
-        
-            const note = new Note(name, created, category, content, dates);
-            note.addNote();
-        
-            return note;
-        }
-        else{
-            throw new Error("Bad data");
-        }
+        const created = currentTime();
+        const dates = findAllDate(content);
+    
+        const note = new Note(name, created, category, content, dates);
+        note.addNote();
+    
+        return note;
     }
     
     editNote(id, data){
         const {name, category, content} = data;
-        if(name && category && content){
-            const noteData = {
-                name: name,
-                created: currentTime(),
-                category: category,
-                content: content,
-                dates: findAllDate(content)
-            }
+        const noteData = {
+            name: name,
+            created: currentTime(),
+            category: category,
+            content: content,
+            dates: findAllDate(content)
+        }
 
-            const editedNote = Note.editNote(id, noteData);
-        
-            return editedNote;
-        }
-        else{
-            throw new Error("Bad data");
-        }
+        const editedNote = Note.editNote(id, noteData);
+    
+        return editedNote;
     }
     
     deleteNote(id){

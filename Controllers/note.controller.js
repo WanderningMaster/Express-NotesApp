@@ -1,19 +1,22 @@
 const NoteService = require("../Services/note.service");
+const { validate } = require('../Helpers/dataHandler');
 
 class NoteController{
     add(req, res){
         const data = req.body;
-        try {
-            const note = NoteService.addNote(data);    
-            res
-                .status(200)
-                .json({data: note});    
-        } catch (e) {
-            console.error(e);
-            res
-                .status(500)
-                .json({data: null});
-        }
+        validate(data)
+            .then(() => {
+                const note = NoteService.addNote(data);    
+                res
+                    .status(200)
+                    .json({data: note});    
+            })
+            .catch(e => {
+                console.error(e);
+                res
+                    .status(500)
+                    .json({data: null});
+            });
     }
 
     remove(req, res){
@@ -35,19 +38,27 @@ class NoteController{
 
     edit(req, res){
         const { id } = req.params;
-        const noteData = req.body;
-        try {
-            const editedNote = NoteService.editNote(id, noteData);
-            res
-                .status(200)
-                .json({data: editedNote});    
-        } catch (e) {
-            console.error(e);
-            res
-                .status(500)
-                .json({data: null});    
-        }
-        
+        const data = req.body;
+        validate(data)
+            .then(() => {
+                try {
+                    const editedNote = NoteService.editNote(id, data);
+                    res
+                        .status(200)
+                        .json({data: editedNote});    
+                } catch (e) {
+                    console.error(e);
+                    res
+                        .status(500)
+                        .json({data: null});    
+                }
+            })
+            .catch(e => {
+                console.error(e);
+                res
+                    .status(500)
+                    .json({data: null});    
+            });
     }
 
     getOne(req, res){
